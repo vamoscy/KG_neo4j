@@ -140,7 +140,7 @@ def rename(file,new_root):
     print(new_root)
     old_path= os.path.join(new_root + file)
     len_new_path=len(os.listdir(new_root))
-    new_name=new_father_path[new_root.index('-')+1:-1] + '-' + str(len_new_path) + '.' + file.split('.')[1]
+    new_name=new_root[new_root.index('-')+1:-1] + '-' + str(len_new_path) + '.' + file.split('.')[1]
     new_path=os.path.join(new_root,new_name)
     os.rename(old_path,new_path)
     return new_name
