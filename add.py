@@ -137,7 +137,7 @@ def resize(file, ID, name, mwidth=40, mheight=40):
 def rename(file,new_father_path):
     old_path=os.path.realpath(file)
     len_new_path=len(os.listdir(new_father_path))
-    new_name=new_father_path[new_father_path.index('-')+1:] + '-' + str(len_new_path+1) + file.split('.')[1]
+    new_name=new_father_path[new_father_path.index('-')+1:-1] + '-' + str(len_new_path+1) + file.split('.')[1]
     new_path=os.path.join(new_father_path,new_name)
     os.rename(old_path,new_path)
     return new_name
