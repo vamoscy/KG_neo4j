@@ -91,7 +91,8 @@ def create_image_url(tx,image_url):
     return None
 
 def resize(file,mwidth=40, mheight=40):
-    with Image.open(os.path.abspath(file)) as img:
+    image_path='http://192.168.11.172:8780//images/logos/' + str(ID) + '-' + p.get_pinyin(name) + '/' + file
+    with Image.open(image_path) as img:
         w, h = img.size
         if w <= mwidth and h <= mheight:
             print(file, 'is OK.')
@@ -100,39 +101,39 @@ def resize(file,mwidth=40, mheight=40):
                 try:
                     scale = 1.0 * w / mwidth
                     resized = img.resize((int(w / scale), int(h / scale)), Image.ANTIALIAS)
-                    resized.save(os.path.abspath(file), format="jpeg")
+                    resized.save(image_path, format="jpeg")
                     print(file, ' successful')
                 except:
-                    print(os.path.abspath(file),'cannot be resized')
+                    print(image_path,'cannot be resized')
             elif file.endswith('png') | file.endswith('PNG'):
                 try:
                     scale = 1.0 * w / mwidth
                     resized = img.resize((int(w / scale), int(h / scale)), Image.ANTIALIAS)
-                    resized.save(os.path.abspath(file), format="png")
+                    resized.save(image_path, format="png")
                     print(file, ' successful')
                 except:
-                    print(os.path.abspath(file),'cannot be resized')
+                    print(image_path,'cannot be resized')
             else:
-                    print(os.path.abspath(file), 'cannot be resized')
+                    print(image_path), 'cannot be resized')
         else:
             if file.endswith('jpg') | file.endswith('jpeg') | file.endswith('JPG'):
                 try:
                     scale = 1.0 * h / mheight
                     resized = img.resize((int(w / scale), int(h / scale)), Image.ANTIALIAS)
-                    resized.save(os.path.abspath(file), format="jpeg")
+                    resized.save(image_path, format="jpeg")
                     print(file, ' successful')
                 except:
-                    print(os.path.abspath(file),'cannot be resized')
+                    print(image_path,'cannot be resized')
             elif file.endswith('png') | file.endswith('PNG'):
                 try:
                     scale = 1.0 * h / mheight
                     resized = img.resize((int(w / scale), int(h / scale)), Image.ANTIALIAS)
-                    resized.save(os.path.abspath(file), format="png")
+                    resized.save(image_path, format="png")
                     print(file, ' successful')
                 except:
-                    print(os.path.abspath(file),'cannot be resized')
+                    print(image_path,'cannot be resized')
             else:
-                print(os.path.abspath(file), 'cannot be resized')
+                print(image_path, 'cannot be resized')
 
 def rename(file,new_father_path):
     old_path=os.path.abspath(file)
