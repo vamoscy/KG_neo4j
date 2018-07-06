@@ -1,1 +1,6 @@
 https://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000/0013868326118089581a091a04e4c30b2b7896392bdde5c000
+from  Tkinter import *
+import Tkinter, Tkconstants, tkFileDialog
+root = Tk()
+root.directory = tkFileDialog.askdirectory()
+print (root.directory)
