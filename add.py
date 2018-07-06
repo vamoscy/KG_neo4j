@@ -90,7 +90,7 @@ def create_image_url(tx,image_url):
     return None
 
 def resize(file, ID, name, mwidth=40, mheight=40):
-    image_path='http://192.168.11.172:8780//images/logos/' + str(ID) + '-' + p.get_pinyin(name) + '/' + file
+    image_path=os.path.realpath(file)
     with Image.open(image_path) as img:
         w, h = img.size
         if w <= mwidth and h <= mheight:
@@ -135,7 +135,7 @@ def resize(file, ID, name, mwidth=40, mheight=40):
                 print(image_path, 'cannot be resized')
 
 def rename(file,new_father_path):
-    old_path=os.path.abspath(file)
+    old_path=os.path.realpath(file)
     len_new_path=len(os.listdir(new_father_path))
     new_name=new_father_path[new_father_path.index('-')+1:] + '-' + str(len_new_path+1) + file.split('.')[1]
     new_path=os.path.join(new_father_path,new_name)
