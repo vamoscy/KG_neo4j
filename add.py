@@ -169,7 +169,7 @@ def create_node_rel(root,name):
     for file in os.listdir(root):
         shutil.copy(os.path.join(root,file), os.path.join(new_root, file))
     for file in os.listdir(new_root):
-        resize(file, ID, name)
+        resize(file, ID, name, new_root)
         new_name = rename(file, new_root)
         image_url = 'http://192.168.11.172:8780//images/logos/' + str(ID) + '-' + p.get_pinyin(name) + '/' + new_name
         driver.session().write_transaction(create_image_url, image_url)
@@ -196,7 +196,7 @@ def add_logos(rootdir):
                             ID = driver.session().read_transaction(get_id, name)
                             new_root = '/home/ftpuser/www/images/logos/' + str(ID) + '-' + p.get_pinyin(name) + '/'
                             shutil.copy(os.path.join(root,file), os.path.join(new_root, file))
-                            resize(file, ID, name)
+                            resize(file, ID, name, new_root)
                             new_name = rename(file, new_root)
                             image_url = 'http://192.168.11.172:8780//images/logos/' + str(ID) + '-' + p.get_pinyin(name) + '/' + new_name
                             driver.session().write_transaction(create_image_url, image_url)
