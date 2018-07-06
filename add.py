@@ -86,7 +86,7 @@ def get_id(tx,name):
         return id_list
 
 def create_image_url(tx,image_url):
-    tx.run('create (:pic{name:'', image_url: $image_url}) ', image_url=image_url)
+    tx.run('create (:pic{name:'  ', image_url: $image_url}) ', image_url=image_url)
     return None
 
 def resize(file, ID, name, new_root, mwidth=40, mheight=40):
