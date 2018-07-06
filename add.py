@@ -184,23 +184,37 @@ def add_logos(rootdir):
             name= re.sub("[{}]+".format(punctuation), "", name)
             if name in name_list:
                 print(name, 'existed')
-                new_brand_question=input('create new brand with same name? y/n')
-                if new_brand_question=='y' :
-                    create_node_rel(root, name)
-                elif new_brand_question=='n':
-                    for file in os.listdir(root):
-                        in_put=input(file+' add? y/n')
-                        if in_put=='y' :
-                            driver.session().write_transaction(create_brand_name, name)
-                            ID = driver.session().read_transaction(get_id, name)
-                            new_root = '/home/ftpuser/www/images/logos/' + str(ID) + '-' + p.get_pinyin(name) + '/'
-                            shutil.copy(os.path.join(root,file), os.path.join(new_root, file))
-                            resize(file, ID, name, new_root)
-                            new_name = rename(file, new_root)
-                            image_url = 'http://192.168.11.172:8780//images/logos/' + str(ID) + '-' + p.get_pinyin(name) + '/' + new_name
-                            driver.session().write_transaction(create_image_url, image_url)
-                            driver.session().write_transaction(create_rel, image_url, ID)
+                for file in os.listdir(root):
+                    in_put=input(file+' add? y/n')
+                    if in_put=='y' :
+                        driver.session().write_transaction(create_brand_name, name)
+                        ID = driver.session().read_transaction(get_id, name)
+                        new_root = '/home/ftpuser/www/images/logos/' + str(ID) + '-' + p.get_pinyin(name) + '/'
+                        shutil.copy(os.path.join(root,file), os.path.join(new_root, file))
+                        resize(file, ID, name, new_root)
+                        new_name = rename(file, new_root)
+                        image_url = 'http://192.168.11.172:8780//images/logos/' + str(ID) + '-' + p.get_pinyin(name) + '/' + new_name
+                        driver.session().write_transaction(create_image_url, image_url)
+                        driver.session().write_transaction(create_rel, image_url, ID)
             else:
                 create_node_rel(root,name)
 
+def create_domain(tx,brand, sub_class):
+    tx.run('merge (n1:brand), (n2:sub_class) '
+           'where n1.name= $brand and n2.name= $sub_class '
+           'create (n1)-[r:涉及领域]->(n2) ', brand=brand, sub_class=sub_class)
+    return None
+
+def update_domain(file):
+    try:
+        fopen=open(file)
+        fopen.readline()
+        for line in fopen:
+            line.strip().split(',')
+            driver.session().write_transaction(line[0], line[1])
+        print('New infomation has been added')
+    except:
+        print('No domain information updated')
+
 add_logos('/home/ftpuser/www/images/add/')
+update_domain('/home/ftpuser/www/images/add/rel.csv')
