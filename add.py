@@ -69,8 +69,7 @@ from PIL import Image
 
 
 def get_name(tx):
-    name_list = 
-    
+    name_list = []
     for record in tx.run("MATCH (n:brand) "
                          "RETURN n.name "):
         name_list.append(record["n.name"])
