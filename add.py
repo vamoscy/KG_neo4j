@@ -89,7 +89,7 @@ def create_image_url(tx,image_url):
     tx.run('create (:pic{name:'', image_url: $image_url}) ', image_url=image_url)
     return None
 
-def resize(file,mwidth=40, mheight=40):
+def resize(file, ID, name, mwidth=40, mheight=40):
     image_path='http://192.168.11.172:8780//images/logos/' + str(ID) + '-' + p.get_pinyin(name) + '/' + file
     with Image.open(image_path) as img:
         w, h = img.size
@@ -113,7 +113,7 @@ def resize(file,mwidth=40, mheight=40):
                 except:
                     print(image_path,'cannot be resized')
             else:
-                    print(image_path), 'cannot be resized')
+                    print(image_path, 'cannot be resized')
         else:
             if file.endswith('jpg') | file.endswith('jpeg') | file.endswith('JPG'):
                 try:
@@ -166,7 +166,7 @@ def create_node_rel(root,name):
     for file in os.listdir(root):
         shutil.copy(os.path.join(root,file), os.path.join(new_root, file))
     for file in os.listdir(new_root):
-        resize(file)
+        resize(file, ID, name)
         new_name = rename(file, new_root)
         image_url = 'http://192.168.11.172:8780//images/logos/' + str(ID) + '-' + p.get_pinyin(name) + '/' + new_name
         driver.session().write_transaction(create_image_url, image_url)
@@ -193,7 +193,7 @@ def add_logos(rootdir):
                             ID = driver.session().read_transaction(get_id, name)
                             new_root = '/home/ftpuser/www/images/logos/' + str(ID) + '-' + p.get_pinyin(name) + '/'
                             shutil.copy(os.path.join(root,file), os.path.join(new_root, file))
-                            resize(file)
+                            resize(file, ID, name)
                             new_name = rename(file, new_root)
                             image_url = 'http://192.168.11.172:8780//images/logos/' + str(ID) + '-' + p.get_pinyin(name) + '/' + new_name
                             driver.session().write_transaction(create_image_url, image_url)
