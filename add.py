@@ -154,7 +154,7 @@ def create_node_rel(root,name):
     driver.session().write_transaction(create_brand_name, name)
     ID_new = driver.session().read_transaction(get_id, name)
     ID=''
-    if ID_old != []:
+    if len(ID_old) != 0:
         for i in ID_new:
             if i not in ID_old:
                 ID=i
