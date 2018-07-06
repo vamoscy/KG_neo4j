@@ -198,4 +198,4 @@ def add_logos(rootdir):
             else:
                 create_node_rel(root,name)
 
-add_logos(input("What's the directory?"))
+add_logos('/home/ftpuser/www/images/add/')
