@@ -69,7 +69,8 @@ from PIL import Image
 
 
 def get_name(tx):
-    name_list = []
+    name_list = 
+    
     for record in tx.run("MATCH (n:brand) "
                          "RETURN n.name "):
         name_list.append(record["n.name"])
@@ -154,7 +155,9 @@ def create_node_rel(root,name):
     driver.session().write_transaction(create_brand_name, name)
     ID_new = driver.session().read_transaction(get_id, name)
     ID=''
-    if len(ID_old) != 0:
+    if len(ID_new)==1:
+        ID=ID_new[0]
+    else:
         for i in ID_new:
             if i not in ID_old:
                 ID=i
