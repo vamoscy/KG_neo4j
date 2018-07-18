@@ -89,7 +89,6 @@ def add_logos(rootdir):
                     for file in os.listdir(root):
                         in_put=input(file+' add? y/n')
                         if in_put=='y' :
-                            driver.session().write_transaction(create_brand_name, name)
                             ID = driver.session().read_transaction(get_id, name)
                             new_root = '/home/ftpuser/www/images/logos/' + str(ID) + '-' + p.get_pinyin(name) + '/'
                             shutil.copy(os.path.join(root,file), os.path.join(new_root, file))
