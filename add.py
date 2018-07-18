@@ -21,13 +21,13 @@ def create_brand_name(tx,name):
     return None
 
 def get_id(tx,name):
-    id_list=[]
+    ID=''
     for record in tx.run("match (n:brand{name: $name}) return ID(n), n.name ", name=name):
-        id_list.append(record["ID(n)"])
-        return id_list
+        ID= record["ID(n)"]
+        return ID
 
 def create_image_url(tx,image_url):
-    tx.run('create (:logo{name: '  ', image_url: $image_url}) ', image_url=image_url)
+    tx.run('create (:logo{name: "  ", image_url: $image_url}) ', image_url=image_url)
     return None
 
 
@@ -49,16 +49,8 @@ def create_rel(tx,image_url,ID):
 
 def create_node_rel(root,name):
     p=Pinyin()
-    ID_old = driver.session().read_transaction(get_id, name)
     driver.session().write_transaction(create_brand_name, name)
-    ID_new = driver.session().read_transaction(get_id, name)
-    ID=''
-    if len(ID_new)==1:
-        ID=ID_new[0]
-    else:
-        for i in ID_new:
-            if i not in ID_old:
-                ID=i
+    ID = driver.session().read_transaction(get_id, name)
     new_root = '/home/ftpuser/www/images/logos/' + str(ID) + '-' + p.get_pinyin(name) + '/'
     os.mkdir(new_root)
     for file in os.listdir(root):
