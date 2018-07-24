@@ -44,32 +44,36 @@ def create_detail(tx, detail):
     return None
 
 def create_rel(tx, start, end):
-    tx.run("MERGE (:细分类{name: $start})-[:适用于]->(:服饰名称{name: $end}) ", start=start, end=end)
+    tx.run("MATCH (from:细分类{name: $start}),(to:服饰名称{name: $end}) "
+           "MERGE (from)-[:适用于]->(to) ", start=start, end=end)
     return None
 
 def create_rel1(tx, start, end):
-    tx.run("MERGE (:细节{name: $start})-[:属于]->(:细分类{name: $end}) ", start=start, end=end)
+    tx.run("MATCH (from:细节{name: $start}),(to:细分类{name: $end}) "
+           "MERGE (from)-[:属于]->(to) ", start=start, end=end)
     return None
 
 def create_rel2(tx, start, end):
-    tx.run("MERGE (:服饰名称{name: $start})-[:见于]->(:大类{name: $end}) ", start=start, end=end)
+    tx.run("MATCH (from:服饰名称{name: $start}),(to:大类{name: $end}) "
+           "MERGE (from)-[:见于]->(to) ", start=start, end=end)
     return None
 
-existed=[]
 def add_node(rootdir):
-    for file in os.listdir(rootdir):
-        clothes_type= file.split('/')[-1][:-4]
-        driver.session().writetransaction(create_rel2, clothes_type, '男装')
-        driver.session().writetransaction(create_clothes_type, clothes_type)
-        fopen=open(file, 'r')
-        for line in fopen:
-            line=line.strip().split(',')
-            if line[0] != '品牌':
-                driver.session().writetransaction(create_subclass, line[0])
-                driver.session().writetransaction(create_rel, line[0], clothes_type)
-                if line[1] != '其它' and line[1] != '其他':
-                    driver.session().writetransaction(create_detail, line[1])
-                    driver.session().writetransaction(create_rel1, line[1], line[0])
+    list_dirs=os.walk(rootdir)
+    for root, dirs, files in list_dirs:
+        for file in files:
+            clothes_type= file[:-4]
+            driver.session().write_transaction(create_clothes_type, clothes_type)
+            driver.session().write_transaction(create_rel2, clothes_type, '女装')
+            fopen=open(os.path.join(root,file), 'r')
+            for line in fopen:
+                line=line.strip().split(',')
+                if line[0] != '品牌':
+                    driver.session().write_transaction(create_subclass, line[0])
+                    driver.session().write_transaction(create_rel, line[0], clothes_type)
+                    if line[1] != '其它' and line[1] != '其他':
+                        driver.session().write_transaction(create_detail, line[1])
+                        driver.session().write_transaction(create_rel1, line[1], line[0])
 
 
 
