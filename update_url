@@ -1,0 +1,19 @@
+from neo4j.v1 import GraphDatabase
+driver = GraphDatabase.driver("bolt://192.168.11.172:7687", auth=("neo4j", "1234"))
+
+def get_urls(tx):
+    url_list=[]
+    for record in tx.run("MATCH (n:logo) "
+                         "RETURN n.image_url "):
+        url_list.append(record["n.image_url"])
+    return url_list
+
+def update_url(tx,old_url,new_url):
+    tx.run("MATCH (n:logo{image_url: $old_url}) "
+           "SET n.image_url= $new_url ", old_url=old_url, new_url=new_url)
+
+url_list=driver.session().read_transaction(get_urls)
+for i in url_list:
+    new_url='http://192.168.11.172:' + i.split('11.172')[1]
+    print(new_url)
+    driver.session().write_transaction(update_url, i, new_url)
